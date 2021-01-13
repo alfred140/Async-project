@@ -130,10 +130,15 @@ namespace lab5
                 }
                 tag++;
                 progressBar.PerformStep();
-
             }
         }
-
+        private async Task SaveImageTask(Task<byte[]> image, string filename)
+        {
+            using (FileStream stream = new FileStream(filename, FileMode.Create))
+            {
+                await stream.WriteAsync(image.Result, 0, image.Result.Length);
+            }
+        }
         private string GetFileName(string url)
         {
             url = url.Split('?')[0];
@@ -147,14 +152,6 @@ namespace lab5
             url = url.Split('/').Last();
 
             return url.Contains('.') ? url.Substring(url.LastIndexOf('.')) : "";
-        }
-
-        private async Task SaveImageTask(Task<byte[]> image, string filename)
-        {
-            using (FileStream stream = new FileStream(filename, FileMode.Create))
-            {
-                await stream.WriteAsync(image.Result, 0, image.Result.Length);
-            }
         }
     }
 }
