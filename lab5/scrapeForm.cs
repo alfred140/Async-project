@@ -23,8 +23,6 @@ namespace lab5
             progressBar.Value = 0;
             saveButton.Enabled = true;
             HttpClient client = new HttpClient();
-
-
             Task<string> downloadHtml = null;
 
             try
@@ -47,8 +45,6 @@ namespace lab5
                 return;
             }
 
-            string regEx = "(?<=<img[^>]*src=\")([^\">]+)";
-
             try
             {
                 downloadHtml.Wait();
@@ -60,6 +56,7 @@ namespace lab5
                 return;
             }
 
+            string regEx = "(?<=<img[^>]*src=\")([^\">]+)";
             MatchCollection collection = Regex.Matches(downloadHtml.Result, regEx, RegexOptions.IgnoreCase);
 
             foreach (object match in collection)
@@ -120,9 +117,10 @@ namespace lab5
 
                     if (task.IsCompleted)
                     {
-                        _ = SaveImageTask(task, Path.Combine(savePath, $"{GetFileName(downloadTasks[task])}" + $"{tag}" +
-                                                                       $"{GetFileExtension(downloadTasks[task])}"));
-
+                        _ = SaveImageTask(task, Path.Combine(
+                            savePath,
+                            GetFileName(downloadTasks[task]) + 
+                            tag + GetFileExtension(downloadTasks[task])));
                     }
                     downloadTasks.Remove(task);
                 }
